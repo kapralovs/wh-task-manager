@@ -32,7 +32,7 @@ func (r *LocalRepo) UpdateTask(t *models.Task, id int64) error {
 	r.mu.Lock()
 	defer r.mu.Unlock()
 
-	r.tasks[int64(len(r.tasks)+1)] = t
+	r.tasks[id] = t
 
 	return nil
 }
@@ -47,6 +47,9 @@ func (r *LocalRepo) DeleteTask(id int64) error {
 }
 
 func (r *LocalRepo) GetTask(id int64) (*models.Task, error) {
+	r.mu.Lock()
+	defer r.mu.Unlock()
+
 	t, ok := r.tasks[id]
 	if !ok {
 		return nil, errors.New("task does not exist")
